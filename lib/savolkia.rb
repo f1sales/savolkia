@@ -13,7 +13,7 @@ class F1SalesCustom::Hooks::Lead
 
   def self.switch_source(lead)
 
-    if lead.source.name.downcase.include?('facebook') && lead.message.downcase.include?('são_paulo_-_ipiranga')
+    if ENV['STORE_ID'] != 'savolkiasp' && lead.source.name.downcase.include?('facebook') && lead.message.downcase.include?('são_paulo_-_ipiranga')
       customer = lead.customer
 
       HTTP.post(
@@ -40,7 +40,7 @@ class F1SalesCustom::Hooks::Lead
 
     end
 
-    if lead.source.name.downcase.include?('facebook') && lead.message.downcase.include?('são_bernardo')
+    if ENV['STORE_ID'] != 'savolkiasbc' && lead.source.name.downcase.include?('facebook') && lead.message.downcase.include?('são_bernardo')
       customer = lead.customer
 
       HTTP.post(
