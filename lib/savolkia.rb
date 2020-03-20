@@ -41,7 +41,11 @@ module Savolkia
 
       end
 
-      if ENV['STORE_ID'] != 'savolkiasp' && lead.source.name.downcase.include?('facebook') && lead.message.downcase.include?('são_paulo_-_ipiranga')
+      if ENV['STORE_ID'] != 'savolkiasp' &&
+          lead.source.name.downcase.include?('facebook') &&
+          (lead.message.downcase.include?('são_paulo_-_ipiranga') ||
+            lead.message.downcase.include?('savol_kia_sp') ||
+            lead.message.downcase.include?('savol_kia_são_paulo'))
         customer = lead.customer
 
         HTTP.post(
@@ -68,7 +72,9 @@ module Savolkia
 
       end
 
-      if ENV['STORE_ID'] != 'savolkiasbc' && lead.source.name.downcase.include?('facebook') && lead.message.downcase.include?('são_bernardo')
+      if ENV['STORE_ID'] != 'savolkiasbc' &&
+          lead.source.name.downcase.include?('facebook') &&
+          (lead.message.downcase.include?('são_bernardo') || lead.message.downcase.include?('savol_kia_são_bernardo'))
         customer = lead.customer
 
         HTTP.post(
