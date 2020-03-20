@@ -13,6 +13,34 @@ module Savolkia
 
     def self.switch_source(lead)
 
+      # Facebook - Savol Kia São José dos Campos
+      if ENV['STORE_ID'] != 'savolkiasjc' && lead.source.name.include?('Facebook - Savol Kia São José dos Campos')
+        customer = lead.customer
+
+        HTTP.post(
+          'https://savolkiasjc.f1sales.org/integrations/leads',
+          json: {
+            lead: {
+              message: lead.message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone,
+              },
+              product: {
+                name: lead.product.name
+              },
+              source: {
+                name: lead.source.name
+              }
+            }
+          },
+        )
+
+        return nil
+
+      end
+
       if ENV['STORE_ID'] != 'savolkiasp' && lead.source.name.downcase.include?('facebook') && lead.message.downcase.include?('são_paulo_-_ipiranga')
         customer = lead.customer
 

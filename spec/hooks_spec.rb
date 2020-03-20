@@ -42,6 +42,60 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
+  context 'when is to SJC' do
+    let(:source_sjc) do
+      source = OpenStruct.new
+      source.name = 'Facebook - Savol Kia São José dos Campos'
+      source
+    end
+    
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.message = 'como_deseja_ser_contatado?: e-mail'
+      lead.source = source_sjc
+      lead.customer = customer
+      lead.product = product
+
+      lead
+    end
+
+    let(:call_url){ "https://savolkiasjc.f1sales.org/integrations/leads" }
+
+    let(:lead_payload) do
+      {
+        lead: {
+          message: lead.message,
+          customer: {
+            name: customer.name,
+            email: customer.email,
+            phone: customer.phone,
+          },
+          product: {
+            name: product.name
+          },
+          source: {
+            name: source_sjc.name
+          }
+        }
+      }
+    end
+
+    before do
+      stub_request(:post, call_url).
+        with(body: lead_payload.to_json).to_return(status: 200, body: "", headers: {})
+    end
+
+    it 'returns nil' do
+      expect(described_class.switch_source(lead)).to be_nil
+    end
+
+    it 'post to sjc', :focus do
+      described_class.switch_source(lead) rescue nil
+      expect(WebMock).to have_requested(:post, call_url).
+        with(body: lead_payload)
+    end
+  end
+
   context 'when is to SBC' do
 
     let(:lead) do
