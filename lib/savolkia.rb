@@ -41,6 +41,36 @@ module Savolkia
 
       end
 
+      if ENV['STORE_ID'] == 'savolkiasp'
+        store_id = "savolkiasbc"
+
+        if rand(0..1) == 0
+          store_id = "savolkia"
+        end
+
+        HTTP.post(
+          "https://#{store_id}.f1sales.org/integrations/leads",
+          json: {
+            lead: {
+              message: lead.message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone,
+              },
+              product: {
+                name: lead.product.name
+              },
+              source: {
+                name: lead.source.name
+              }
+            }
+          },
+        )
+
+        return nil
+      end
+
       # if ENV['STORE_ID'] != 'savolkiasp' &&
       #     lead.source.name.downcase.include?('facebook') &&
       #     (lead.message.downcase.include?('são_paulo_-_ipiranga') ||
@@ -72,34 +102,34 @@ module Savolkia
       #
       # end
       #
-      # if ENV['STORE_ID'] != 'savolkiasbc' &&
-      #     lead.source.name.downcase.include?('facebook') &&
-      #     (lead.message.downcase.include?('são_bernardo') || lead.message.downcase.include?('savol_kia_são_bernardo'))
-      #   customer = lead.customer
-      #
-      #   HTTP.post(
-      #     'https://savolkiasbc.f1sales.org/integrations/leads',
-      #     json: {
-      #       lead: {
-      #         message: lead.message,
-      #         customer: {
-      #           name: customer.name,
-      #           email: customer.email,
-      #           phone: customer.phone,
-      #         },
-      #         product: {
-      #           name: lead.product.name
-      #         },
-      #         source: {
-      #           name: lead.source.name
-      #         }
-      #       }
-      #     },
-      #   )
-      #
-      #   return nil
-      # end
-      #
+      if ENV['STORE_ID'] != 'savolkiasbc' &&
+          lead.source.name.downcase.include?('facebook') &&
+          (lead.message.downcase.include?('são_bernardo') || lead.message.downcase.include?('savol_kia_são_bernardo'))
+        customer = lead.customer
+
+        HTTP.post(
+          'https://savolkiasbc.f1sales.org/integrations/leads',
+          json: {
+            lead: {
+              message: lead.message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone,
+              },
+              product: {
+                name: lead.product.name
+              },
+              source: {
+                name: lead.source.name
+              }
+            }
+          },
+        )
+
+        return nil
+      end
+
       return lead.source.name
     end
   end
