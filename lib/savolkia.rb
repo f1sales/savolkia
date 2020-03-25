@@ -44,7 +44,7 @@ module Savolkia
       if ENV['STORE_ID'] == 'savolkiasp'
         store_id = "savolkiasbc"
 
-        if rand(0..1) == 0
+        if rand(0..3) == 0
           store_id = "savolkia"
         end
 
