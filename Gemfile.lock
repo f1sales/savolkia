@@ -22,7 +22,7 @@ GIT
 PATH
   remote: .
   specs:
-    savolkia (0.1.3)
+    savolkia (0.1.4)
 
 GEM
   remote: https://rubygems.org/

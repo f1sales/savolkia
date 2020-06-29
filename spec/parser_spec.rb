@@ -5,7 +5,7 @@ require "f1sales_custom/source"
 RSpec.describe F1SalesCustom::Email::Parser do
 
   context 'when is a different template' do
-    let(:email){ 
+    let(:email){
       email = OpenStruct.new
       email.to = [email: 'website@savolkia.f1sales.org'],
       email.subject = 'OKM - Stinger',
@@ -43,7 +43,7 @@ RSpec.describe F1SalesCustom::Email::Parser do
   end
 
   context 'when is from website to SBC' do
-    let(:email){ 
+    let(:email){
       email = OpenStruct.new
       email.to = [email: 'website@savolkia.f1sales.org'],
       email.subject = 'Oferta / Estoque - Proposta',

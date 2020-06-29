@@ -9,9 +9,37 @@ require "json"
 module Savolkia
   class Error < StandardError; end
 
-  class F1SalesCustom::Hooks::Lead 
+  class F1SalesCustom::Hooks::Lead
 
     def self.switch_source(lead)
+
+      # Facebook - Savol Toyota Praia
+      if ENV['STORE_ID'] == 'savolkia' && lead.source.name.downcase.include?('toyota')
+        customer = lead.customer
+
+        HTTP.post(
+          'https://savoltoyotapraia.f1sales.org/integrations/leads',
+          json: {
+            lead: {
+              message: lead.message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone,
+              },
+              product: {
+                name: lead.product.name
+              },
+              source: {
+                name: lead.source.name
+              }
+            }
+          },
+        )
+
+        return nil
+
+      end
 
       # Facebook - Savol Kia São José dos Campos
       if ENV['STORE_ID'] != 'savolkiasjc' && lead.source.name.include?('Facebook - Savol Kia São José dos Campos')
@@ -41,35 +69,35 @@ module Savolkia
 
       end
 
-      if ENV['STORE_ID'] == 'savolkiasp'
-        store_id = "savolkiasbc"
-
-        if rand(0..3) == 0
-          store_id = "savolkia"
-        end
-
-        HTTP.post(
-          "https://#{store_id}.f1sales.org/integrations/leads",
-          json: {
-            lead: {
-              message: lead.message,
-              customer: {
-                name: customer.name,
-                email: customer.email,
-                phone: customer.phone,
-              },
-              product: {
-                name: lead.product.name
-              },
-              source: {
-                name: lead.source.name
-              }
-            }
-          },
-        )
-
-        return nil
-      end
+      # if ENV['STORE_ID'] == 'savolkiasp'
+      #   store_id = "savolkiasbc"
+      #
+      #   if rand(0..3) == 0
+      #     store_id = "savolkia"
+      #   end
+      #
+      #   HTTP.post(
+      #     "https://#{store_id}.f1sales.org/integrations/leads",
+      #     json: {
+      #       lead: {
+      #         message: lead.message,
+      #         customer: {
+      #           name: customer.name,
+      #           email: customer.email,
+      #           phone: customer.phone,
+      #         },
+      #         product: {
+      #           name: lead.product.name
+      #         },
+      #         source: {
+      #           name: lead.source.name
+      #         }
+      #       }
+      #     },
+      #   )
+      #
+      #   return nil
+      # end
 
       # if ENV['STORE_ID'] != 'savolkiasp' &&
       #     lead.source.name.downcase.include?('facebook') &&
@@ -102,39 +130,39 @@ module Savolkia
       #
       # end
       #
-      if ENV['STORE_ID'] != 'savolkiasbc' &&
-          lead.source.name.downcase.include?('facebook') &&
-          (lead.message.downcase.include?('são_bernardo') || lead.message.downcase.include?('savol_kia_são_bernardo'))
-        customer = lead.customer
-
-        HTTP.post(
-          'https://savolkiasbc.f1sales.org/integrations/leads',
-          json: {
-            lead: {
-              message: lead.message,
-              customer: {
-                name: customer.name,
-                email: customer.email,
-                phone: customer.phone,
-              },
-              product: {
-                name: lead.product.name
-              },
-              source: {
-                name: lead.source.name
-              }
-            }
-          },
-        )
-
-        return nil
-      end
+      # if ENV['STORE_ID'] != 'savolkiasbc' &&
+      #     lead.source.name.downcase.include?('facebook') &&
+      #     (lead.message.downcase.include?('são_bernardo') || lead.message.downcase.include?('savol_kia_são_bernardo'))
+      #   customer = lead.customer
+      #
+      #   HTTP.post(
+      #     'https://savolkiasbc.f1sales.org/integrations/leads',
+      #     json: {
+      #       lead: {
+      #         message: lead.message,
+      #         customer: {
+      #           name: customer.name,
+      #           email: customer.email,
+      #           phone: customer.phone,
+      #         },
+      #         product: {
+      #           name: lead.product.name
+      #         },
+      #         source: {
+      #           name: lead.source.name
+      #         }
+      #       }
+      #     },
+      #   )
+      #
+      #   return nil
+      # end
 
       return lead.source.name
     end
   end
 
-  class F1SalesCustom::Email::Source 
+  class F1SalesCustom::Email::Source
     def self.all
       [
         {
@@ -184,4 +212,3 @@ module Savolkia
     end
   end
 end
-
