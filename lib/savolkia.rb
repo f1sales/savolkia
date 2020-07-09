@@ -130,33 +130,33 @@ module Savolkia
       #
       # end
       #
-      # if ENV['STORE_ID'] != 'savolkiasbc' &&
-      #     lead.source.name.downcase.include?('facebook') &&
-      #     (lead.message.downcase.include?('são_bernardo') || lead.message.downcase.include?('savol_kia_são_bernardo'))
-      #   customer = lead.customer
-      #
-      #   HTTP.post(
-      #     'https://savolkiasbc.f1sales.org/integrations/leads',
-      #     json: {
-      #       lead: {
-      #         message: lead.message,
-      #         customer: {
-      #           name: customer.name,
-      #           email: customer.email,
-      #           phone: customer.phone,
-      #         },
-      #         product: {
-      #           name: lead.product.name
-      #         },
-      #         source: {
-      #           name: lead.source.name
-      #         }
-      #       }
-      #     },
-      #   )
-      #
-      #   return nil
-      # end
+      if ENV['STORE_ID'] != 'savolkiasbc' &&
+          lead.source.name.downcase.include?('facebook') &&
+          (lead.message.downcase.include?('são_bernardo') || lead.message.downcase.include?('savol_kia_são_bernardo'))
+        customer = lead.customer
+
+        HTTP.post(
+          'https://savolkia.f1sales.org/integrations/leads',
+          json: {
+            lead: {
+              message: lead.message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone,
+              },
+              product: {
+                name: lead.product.name
+              },
+              source: {
+                name: lead.source.name
+              }
+            }
+          },
+        )
+
+        return nil
+      end
 
       return lead.source.name
     end
